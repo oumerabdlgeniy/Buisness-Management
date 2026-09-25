@@ -1,7 +1,11 @@
+import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { customers } from '../data/data'
+import { customers, translations } from '../data/data'
+import { LanguageContext } from '../context/LanguageProvider'
 
 export default function CustomerDetails() {
+  const { language } = useContext(LanguageContext)
+  const t = translations[language] || translations.en
 
   const { id } = useParams()
 
@@ -10,7 +14,7 @@ export default function CustomerDetails() {
   )
 
   if (!customer) {
-    return <p className="p-6">Customer not found.</p>
+    return <p className="p-6">{t.customerNotFound}</p>
   }
 
   return (
@@ -23,11 +27,11 @@ export default function CustomerDetails() {
       <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
 
         <p>
-          <strong>Email:</strong> {customer.email}
+          <strong>{t.email}:</strong> {customer.email}
         </p>
 
         <p className="mt-2">
-          <strong>Phone:</strong> {customer.phone}
+          <strong>{t.phone}:</strong> {customer.phone}
         </p>
 
       </div>

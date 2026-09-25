@@ -1,7 +1,13 @@
+import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import Card from './Card'
+import { LanguageContext } from '../context/LanguageProvider'
+import { translations } from '../data/data'
 
 export default function CustomerCard({ customer, onDelete }) {
+  const { language } = useContext(LanguageContext)
+  const t = { ...translations.en, ...(translations[language] || {}) }
+
   return (
     <Card>
 
@@ -23,14 +29,14 @@ export default function CustomerCard({ customer, onDelete }) {
     onClick={() => onDelete(customer.id)}
     className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
   >
-    Delete
+    {t.delete}
   </button>
 
   <NavLink
     to={`/customers/${customer.id}`}
     className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
   >
-    View Details
+    {t.viewDetails}
   </NavLink>
 
 </div>

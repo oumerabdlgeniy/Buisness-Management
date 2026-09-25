@@ -1,3 +1,5 @@
+import { useEffect, useState,useContext } from 'react'
+
 import {
   LayoutDashboard,
   Users,
@@ -9,106 +11,125 @@ import {
   CheckSquare,
   UserCircle,
   Settings,
+  BriefcaseBusiness,
 } from 'lucide-react'
 
 import { NavLink } from 'react-router-dom'
+import { LanguageContext } from '../context/LanguageProvider'
+import { translations } from '../data/data'
+import { AppSettingsContext } from '../context/AppSettingsProvider'
 
 export default function Sidebar() {
-  return (
-    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 border-r border-slate-200 bg-white lg:block">
+  const { language } = useContext(LanguageContext)
+  const { role } = useContext(AppSettingsContext)
 
-      <div className="flex h-20 items-center border-b border-slate-200 px-6">
-        <div>
+  const t = { ...translations.en, ...(translations[language] || {}) }
+const [businessName, setBusinessName] = useState(
+  localStorage.getItem('businessName') || 'BizFlow'
+)
+
+useEffect(() => {
+  const updateBusinessName = () => {
+    setBusinessName(localStorage.getItem('businessName') || 'BizFlow')
+  }
+
+  window.addEventListener('businessNameUpdated', updateBusinessName)
+
+  return () => {
+    window.removeEventListener('businessNameUpdated', updateBusinessName)
+  }
+}, [])
+  return (
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 overflow-y-auto border-r border-slate-200 bg-white transition-all duration-300 dark:border-slate-700 dark:bg-slate-800 lg:block">
+      <div className="flex h-20 items-center border-b border-slate-200 px-6 dark:border-slate-700">
+        <div className="flex items-center gap-3">
+          <BriefcaseBusiness className="text-blue-600" size={30} aria-hidden="true" />
+          <div>
           <h1 className="text-2xl font-bold text-blue-600">
-            BizFlow
+            {businessName}
           </h1>
 
-          <p className="text-xs text-slate-500">
-            Business Management
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {t.navbarTitle}
           </p>
+          </div>
         </div>
       </div>
 
-      <nav className="p-4">
-
+      <nav className="p-4 pb-8">
         <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          Main Menu
+          {t.mainMenu}
         </p>
 
         <div className="space-y-1">
-
           <SidebarItem
             to="/"
             icon={<LayoutDashboard size={20} />}
-            label="Dashboard"
+            label={t.dashboard}
           />
 
-          <SidebarItem
+          {role !== 'Employee' && <SidebarItem
             to="/customers"
             icon={<Users size={20} />}
-            label="Customers"
-          />
+            label={t.customers}
+          />}
 
-          <SidebarItem
+          {role !== 'Employee' && <SidebarItem
             to="/services"
             icon={<Briefcase size={20} />}
-            label="Services"
-          />
+            label={t.services}
+          />}
 
-          <SidebarItem
+          {role === 'Admin' && <SidebarItem
             to="/employees"
             icon={<UserRound size={20} />}
-            label="Employees"
-          />
+            label={t.employees}
+          />}
 
-          <SidebarItem
+          {role !== 'Employee' && <SidebarItem
             to="/appointments"
             icon={<CalendarDays size={20} />}
-            label="Appointments"
-          />
+            label={t.appointments}
+          />}
 
-          <SidebarItem
+          {role !== 'Employee' && <SidebarItem
             to="/payments"
             icon={<CreditCard size={20} />}
-            label="Payments"
-          />
+            label={t.payments}
+          />}
 
-          <SidebarItem
+          {role !== 'Employee' && <SidebarItem
             to="/reports"
             icon={<BarChart3 size={20} />}
-            label="Reports"
-          />
+            label={t.reports}
+          />}
 
           <SidebarItem
             to="/tasks"
             icon={<CheckSquare size={20} />}
-            label="Tasks"
+            label={t.tasks}
           />
 
         </div>
 
         <p className="mb-3 mt-8 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          Account
+          {t.account}
         </p>
 
         <div className="space-y-1">
-
           <SidebarItem
             to="/profile"
             icon={<UserCircle size={20} />}
-            label="Profile"
+            label={t.profile}
           />
 
           <SidebarItem
             to="/settings"
             icon={<Settings size={20} />}
-            label="Settings"
+            label={t.settings}
           />
-
         </div>
-
       </nav>
-
     </aside>
   )
 }
@@ -120,8 +141,8 @@ function SidebarItem({ to, icon, label }) {
       className={({ isActive }) =>
         `flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
           isActive
-            ? 'bg-blue-50 text-blue-600'
-            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white'
         }`
       }
     >
