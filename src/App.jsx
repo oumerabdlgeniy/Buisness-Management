@@ -24,7 +24,7 @@ import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
 
       <ThemeProvider>
 

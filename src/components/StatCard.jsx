@@ -7,7 +7,7 @@ export default function StatCard({ title, value, description }) {
         {title}
       </p>
 
-      <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
+      <h2 className="mt-2 max-w-full break-words text-2xl font-bold leading-tight text-slate-900 [overflow-wrap:anywhere] sm:text-3xl dark:text-white">
         {value}
       </h2>
 

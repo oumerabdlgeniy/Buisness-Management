@@ -134,18 +134,18 @@ export default function Dashboard() {
 
       <div className="mt-6">
         <Card>
-          <div className="mb-5 flex items-center justify-between">
-            <div>
+          <div className="mb-5 flex min-w-0 items-center justify-between gap-3">
+            <div className="min-w-0">
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{t.revenueTrend}</h2>
                 <p className="text-sm text-slate-500 dark:text-slate-400">{t.revenueTrendDescription}</p>
             </div>
-            <span className="text-sm font-medium text-blue-600">{formatCurrency(totalRevenue, currency, exchangeRates)}</span>
+            <span className="min-w-0 break-words text-right text-sm font-medium text-blue-600 [overflow-wrap:anywhere]">{formatCurrency(totalRevenue, currency, exchangeRates)}</span>
           </div>
           {trendEntries.length ? (
             <div className="flex h-44 items-end gap-3" aria-label="Revenue trend chart">
               {trendEntries.map(([date, amount]) => (
                 <div key={date} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                  <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{formatCurrency(amount, currency, exchangeRates)}</span>
+                  <span className="max-w-full break-words text-center text-xs font-medium text-slate-600 [overflow-wrap:anywhere] dark:text-slate-300">{formatCurrency(amount, currency, exchangeRates)}</span>
                   <div className="w-full rounded-t bg-blue-500 transition-all hover:bg-blue-600" style={{ height: `${Math.max((amount / trendMax) * 110, 8)}px` }} title={`${date}: ${formatCurrency(amount, currency, exchangeRates)}`} />
                   <span className="truncate text-xs text-slate-400">{date.slice(5)}</span>
                 </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
         {/* Paid Payments */}
         <Card>
           <div className="flex items-center justify-between">
-            <div>
+            <div className="min-w-0">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                 {t.paidPayments}
               </h2>
@@ -176,7 +176,7 @@ export default function Dashboard() {
             />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-green-600">
+          <p className="mt-4 max-w-full break-words text-2xl font-bold leading-tight text-green-600 [overflow-wrap:anywhere] sm:text-3xl">
             {formatCurrency(totalRevenue, currency, exchangeRates)}
           </p>
         </Card>
@@ -184,7 +184,7 @@ export default function Dashboard() {
         {/* Pending Payments */}
         <Card>
           <div className="flex items-center justify-between">
-            <div>
+            <div className="min-w-0">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                 {t.pendingPayments}
               </h2>
@@ -200,7 +200,7 @@ export default function Dashboard() {
             />
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-yellow-600">
+          <p className="mt-4 max-w-full break-words text-2xl font-bold leading-tight text-yellow-600 [overflow-wrap:anywhere] sm:text-3xl">
             {formatCurrency(totalPending, currency, exchangeRates)}
           </p>
         </Card>

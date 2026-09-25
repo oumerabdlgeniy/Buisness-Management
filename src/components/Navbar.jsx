@@ -24,9 +24,11 @@ import {
   Globe,
   ChevronDown,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react'
 
-export default function Navbar() {
+export default function Navbar({ onToggleSidebar, sidebarOpen }) {
   const { darkMode, toggleTheme } = useContext(ThemeContext)
   const { language, setLanguage } = useContext(LanguageContext)
   const { currency, exchangeRates, emailNotifications, appointmentNotifications } = useContext(AppSettingsContext)
@@ -202,17 +204,29 @@ export default function Navbar() {
   }, [])
 
   return (
-    <header className="fixed right-0 top-0 z-30 min-h-20 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md dark:border-slate-700 dark:bg-slate-800/80 lg:left-72 lg:w-auto">
+    <header className={`fixed right-0 top-0 z-30 min-h-20 border-b border-slate-200 bg-white/80 backdrop-blur-md dark:border-slate-700 dark:bg-slate-800/80 ${sidebarOpen ? 'lg:left-72 lg:w-auto' : 'left-0 w-full'}`}>
       <div className="flex min-h-20 flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
         {/* Title */}
-        <div className="flex-shrink-0">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white sm:text-xl">
-            {t.navbarTitle}
-          </h2>
+        <div className="flex min-w-0 flex-shrink-0 items-center gap-3">
+          <button
+            type="button"
+            onClick={onToggleSidebar}
+            aria-label="Toggle sidebar"
+            aria-expanded={sidebarOpen}
+            title="Toggle sidebar"
+            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+          >
+            {sidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
+          </button>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white sm:text-xl">
+              {t.navbarTitle}
+            </h2>
 
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {t.manageBusiness}
-          </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {t.manageBusiness}
+            </p>
+          </div>
         </div>
 
         {/* Right side */}

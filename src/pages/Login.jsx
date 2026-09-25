@@ -41,12 +41,12 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6 dark:bg-slate-900">
+    <div className="flex min-h-dvh items-center justify-center bg-slate-50 p-4 sm:p-6 dark:bg-slate-900">
 
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm dark:bg-slate-800">
+      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-sm sm:p-10 dark:bg-slate-800">
 
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-blue-600">
+        <div className="mb-8 text-center sm:mb-10">
+          <h1 className="text-4xl font-bold text-blue-600">
             Bizflow
           </h1>
 

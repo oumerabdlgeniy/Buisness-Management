@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 
 import {
   LayoutDashboard,
@@ -19,7 +19,7 @@ import { LanguageContext } from '../context/LanguageProvider'
 import { translations } from '../data/data'
 import { AppSettingsContext } from '../context/AppSettingsProvider'
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const { language } = useContext(LanguageContext)
   const { role } = useContext(AppSettingsContext)
 
@@ -40,7 +40,16 @@ useEffect(() => {
   }
 }, [])
   return (
-    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 overflow-y-auto border-r border-slate-200 bg-white transition-all duration-300 dark:border-slate-700 dark:bg-slate-800 lg:block">
+    <>
+      {isOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-slate-950/40 lg:hidden"
+        />
+      )}
+      <aside className={`fixed left-0 top-0 z-50 h-dvh w-72 max-w-[85vw] overflow-y-auto border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-700 dark:bg-slate-800 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex h-20 items-center border-b border-slate-200 px-6 dark:border-slate-700">
         <div className="flex items-center gap-3">
           <BriefcaseBusiness className="text-blue-600" size={30} aria-hidden="true" />
@@ -56,7 +65,12 @@ useEffect(() => {
         </div>
       </div>
 
-      <nav className="p-4 pb-8">
+      <nav
+        className="p-4 pb-8"
+        onClick={(event) => {
+          if (window.innerWidth < 1024 && event.target.closest('a')) onClose()
+        }}
+      >
         <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
           {t.mainMenu}
         </p>
@@ -130,7 +144,8 @@ useEffect(() => {
           />
         </div>
       </nav>
-    </aside>
+      </aside>
+    </>
   )
 }
 
