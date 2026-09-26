@@ -13,6 +13,7 @@ import {
   services as initialServices,
   employees as initialEmployees,
   appointments as initialAppointments,
+  payments as initialPayments,
 } from '../data/data'
 
 import {
@@ -47,7 +48,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }) {
     services: initialServices,
     employees: initialEmployees,
     appointments: initialAppointments,
-    payments: [],
+    payments: initialPayments,
   })
 
   const [profileName, setProfileName] = useState(() => {
@@ -71,7 +72,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }) {
         services: readList('services', initialServices),
         employees: readList('employees', initialEmployees),
         appointments: readList('appointments', initialAppointments),
-        payments: readList('payments', []),
+        payments: readList('payments', initialPayments),
       })
     }
 
@@ -147,7 +148,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }) {
       .filter((payment) => payment.status === 'Pending')
       .map((payment) => ({
         id: `pending-${payment.id}`,
-        text: `${t.pending}: ${payment.customer} - $${payment.amount}`,
+        text: `${t.pending}: ${payment.customer} - ${formatCurrency(payment.amount, currency, exchangeRates)}`,
         path: '/payments',
       })) : []),
     ...(appointmentNotifications ? records.appointments.slice(-5).map((appointment) => ({

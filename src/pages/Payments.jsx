@@ -49,7 +49,7 @@ export default function Payments() {
       id: Date.now(),
       customer: formData.customer,
       service: formData.service,
-      amount: Number(formData.amount),
+      amount: Number(formData.amount) / (exchangeRates[currency] || 1),
       date: formData.date,
       status: formData.status,
     }
@@ -153,8 +153,9 @@ export default function Payments() {
             name="amount"
             value={formData.amount}
             onChange={handleChange}
-            placeholder={t.amount}
+            placeholder={`${t.amount} (${currency})`}
             min="0"
+            step="any"
             className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             required
           />

@@ -39,12 +39,12 @@ function Settings() {
 
   // Notifications
   const [emailNotifications, setEmailNotifications] = useState(
-    localStorage.getItem('emailNotifications') === 'true'
+    localStorage.getItem('emailNotifications') !== 'false'
   )
 
   const [appointmentNotifications, setAppointmentNotifications] =
     useState(
-      localStorage.getItem('appointmentNotifications') === 'true'
+      localStorage.getItem('appointmentNotifications') !== 'false'
     )
 
   // Dashboard Preferences
