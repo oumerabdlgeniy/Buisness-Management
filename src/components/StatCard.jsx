@@ -2,8 +2,8 @@ import Card from './Card'
 
 export default function StatCard({ title, value, description }) {
   return (
-    <Card>
-      <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+    <Card className="border-t-2 border-t-[#5d9b7b]">
+      <p className="text-sm font-medium text-slate-500/90 dark:text-slate-400">
         {title}
       </p>
 

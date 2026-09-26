@@ -52,9 +52,11 @@ useEffect(() => {
       <aside className={`fixed left-0 top-0 z-50 h-dvh w-72 max-w-[85vw] overflow-y-auto border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-700 dark:bg-slate-800 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex h-20 items-center border-b border-slate-200 px-6 dark:border-slate-700">
         <div className="flex items-center gap-3">
-          <BriefcaseBusiness className="text-blue-600" size={30} aria-hidden="true" />
+          <div className="rounded-lg bg-[#e7f0e8] p-2 text-[#18745a] dark:bg-emerald-950 dark:text-emerald-300">
+            <BriefcaseBusiness size={22} aria-hidden="true" />
+          </div>
           <div>
-          <h1 className="text-2xl font-bold text-blue-600">
+          <h1 className="text-2xl font-bold text-[#18745a] dark:text-emerald-300">
             {businessName}
           </h1>
 
@@ -156,7 +158,7 @@ function SidebarItem({ to, icon, label }) {
       className={({ isActive }) =>
         `flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
           isActive
-            ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+            ? 'border-l-2 border-[#d78659] bg-[#edf4ee] text-[#176b53] dark:bg-emerald-950/70 dark:text-emerald-300'
             : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white'
         }`
       }

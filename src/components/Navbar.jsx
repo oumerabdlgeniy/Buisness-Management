@@ -32,7 +32,7 @@ import {
 export default function Navbar({ onToggleSidebar, sidebarOpen }) {
   const { darkMode, toggleTheme } = useContext(ThemeContext)
   const { language, setLanguage } = useContext(LanguageContext)
-  const { currency, exchangeRates, emailNotifications, appointmentNotifications } = useContext(AppSettingsContext)
+  const { currency, exchangeRates, emailNotifications } = useContext(AppSettingsContext)
   const { logout } = useAuth()
 
   const [showLanguages, setShowLanguages] = useState(false)
@@ -41,7 +41,11 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }) {
   const [showNotifications, setShowNotifications] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [readNotificationIds, setReadNotificationIds] = useState(() => {
-    return readStorage('readNotificationIds', [])
+    return readStorage('readNotificationIds', []).map((id) =>
+      id.startsWith('pending-')
+        ? `payment-${id.slice('pending-'.length)}-Pending`
+        : id
+    )
   })
   const [records, setRecords] = useState({
     customers: initialCustomers,
@@ -143,20 +147,37 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }) {
         .slice(0, 8)
     : []
 
+  const recentPaymentIds = new Set(
+    records.payments.slice(-5).map((payment) => payment.id)
+  )
   const notifications = [
     ...(emailNotifications ? records.payments
-      .filter((payment) => payment.status === 'Pending')
+      .filter((payment) => payment.status === 'Pending' || recentPaymentIds.has(payment.id))
       .map((payment) => ({
-        id: `pending-${payment.id}`,
-        text: `${t.pending}: ${payment.customer} - ${formatCurrency(payment.amount, currency, exchangeRates)}`,
+        id: `payment-${payment.id}-${payment.status}`,
+        text: `${payment.status === 'Pending' ? t.pending : t.paid}: ${payment.customer} - ${formatCurrency(payment.amount, currency, exchangeRates)}`,
         path: '/payments',
+        createdAt: Number(payment.id) || 0,
       })) : []),
-    ...(appointmentNotifications ? records.appointments.slice(-5).map((appointment) => ({
+    ...records.appointments.slice(-5).map((appointment) => ({
       id: `appointment-${appointment.id}`,
       text: `${t.upcomingAppointments}: ${appointment.customer} - ${appointment.date}`,
       path: '/appointments',
-      })) : []),
-  ]
+      createdAt: Number(appointment.id) || 0,
+    })),
+    ...records.customers.slice(-5).map((customer) => ({
+      id: `customer-${customer.id}`,
+      text: `${t.customers}: ${customer.name}`,
+      path: '/customers',
+      createdAt: Number(customer.id) || 0,
+    })),
+    ...records.employees.slice(-5).map((employee) => ({
+      id: `employee-${employee.id}`,
+      text: `${t.employees}: ${employee.name}`,
+      path: '/employees',
+      createdAt: Number(employee.id) || 0,
+    })),
+  ].sort((first, second) => second.createdAt - first.createdAt)
 
   const hasUnreadNotifications = notifications.some(
     (notification) => !readNotificationIds.includes(notification.id)

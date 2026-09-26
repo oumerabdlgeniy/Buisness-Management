@@ -92,12 +92,55 @@ export default function Dashboard() {
   const trendMax = Math.max(...trendEntries.map(([, amount]) => amount), 1)
 
   return (
-    <div className="p-6">
+    <div className="dashboard-content p-4 sm:p-6">
       {/* Page Title */}
       <PageTitle
         title={t.dashboard}
         description={t.dashboardDescription}
       />
+
+      <section className="dashboard-hero mb-6" aria-labelledby="revenue-trend-title">
+        <div className="relative z-10 grid gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-end lg:p-10">
+          <div className="min-w-0">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-100/65">
+              {t.totalRevenue}
+            </p>
+            <h2 id="revenue-trend-title" className="text-xl font-semibold text-white sm:text-2xl">
+              {t.revenueTrend}
+            </h2>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-emerald-50/65">
+              {t.revenueTrendDescription}
+            </p>
+            <p className="mt-7 break-words text-3xl font-semibold leading-tight text-[#f0bd86] [overflow-wrap:anywhere] sm:text-4xl">
+              {formatCurrency(totalRevenue, currency, exchangeRates)}
+            </p>
+            <p className="mt-2 text-sm text-emerald-50/55">
+              {t.revenueDescription}
+            </p>
+          </div>
+
+          <div className="dashboard-hero-chart relative flex h-48 min-w-0 items-end gap-2 border-b border-l border-emerald-50/20 px-3 pb-2 pt-5 sm:h-56 sm:gap-3 sm:px-5" role="img" aria-label={t.revenueTrend}>
+            {trendEntries.length ? (
+              trendEntries.map(([date, amount], index) => (
+                <div key={date} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2">
+                  <div
+                    className="dashboard-hero-bar w-full max-w-12"
+                    style={{ height: `${Math.max((amount / trendMax) * 100, 8)}%`, animationDelay: `${index * 55}ms` }}
+                    title={`${date}: ${formatCurrency(amount, currency, exchangeRates)}`}
+                  />
+                  <span className="max-w-full truncate text-[11px] text-emerald-50/55 sm:text-xs">
+                    {date.slice(5)}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p className="mb-8 w-full text-center text-sm text-emerald-50/60">
+                {t.noPaidPayments}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Main Statistics */}
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
@@ -130,29 +173,6 @@ export default function Dashboard() {
           value={formatCurrency(totalRevenue, currency, exchangeRates)}
           description={t.revenueDescription}
         />
-      </div>
-
-      <div className="mt-6">
-        <Card>
-          <div className="mb-5 flex min-w-0 items-center justify-between gap-3">
-            <div className="min-w-0">
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{t.revenueTrend}</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">{t.revenueTrendDescription}</p>
-            </div>
-            <span className="min-w-0 break-words text-right text-sm font-medium text-blue-600 [overflow-wrap:anywhere]">{formatCurrency(totalRevenue, currency, exchangeRates)}</span>
-          </div>
-          {trendEntries.length ? (
-            <div className="flex h-44 items-end gap-3" aria-label="Revenue trend chart">
-              {trendEntries.map(([date, amount]) => (
-                <div key={date} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                  <span className="max-w-full break-words text-center text-xs font-medium text-slate-600 [overflow-wrap:anywhere] dark:text-slate-300">{formatCurrency(amount, currency, exchangeRates)}</span>
-                  <div className="w-full rounded-t bg-blue-500 transition-all hover:bg-blue-600" style={{ height: `${Math.max((amount / trendMax) * 110, 8)}px` }} title={`${date}: ${formatCurrency(amount, currency, exchangeRates)}`} />
-                  <span className="truncate text-xs text-slate-400">{date.slice(5)}</span>
-                </div>
-              ))}
-            </div>
-          ) : <p className="py-12 text-center text-sm text-slate-500 dark:text-slate-400">{t.noPaidPayments}</p>}
-        </Card>
       </div>
 
       {/* Payment Summary */}
